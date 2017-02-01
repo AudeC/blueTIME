@@ -416,6 +416,14 @@ if(newValue == true){
             if($scope.en_pause) $scope.pause(); 
             // finir l'activité aussi
             activiteFin();
+         // $scope.send in options  
+            if(!localStorage.getItem("key")) return false; 
+            Manager.send(localStorage.getItem("key")); 
+            $ionicPopup.alert({
+                title: 'Mise à jour',
+                template: 'Les données ont été envoyées sur votre profil BlueTIME. Veuillez vous y connecter pour vérifier que les nouvelles journées ont bien été ajoutées (cela peut échouer en cas d\'absence de connexion internet)'
+            });
+            
     
     }
     
