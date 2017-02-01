@@ -1,12 +1,26 @@
 angular.module('starter.controllers', ['ionic', 'ngCordova', 'firebase'])
 
-.controller('DashCtrl', function($scope, $firebaseObject, $firebaseArray) {
+.controller('DashCtrl', function($scope, $firebaseObject, $firebaseArray, $ionicLoading) {
     
+
+
+
 })
 
 // SaisieCtrl, contrôleur qui pourrait être divisé en plusieurs parties éventuellement
 // Gère toute la saisie d'une journée
 .controller('SaisieCtrl', ["$ionicPlatform", "$scope", "$ionicModal", "$ionicPopup", "$timeout", "DatabaseManager", "$filter", "$ionicLoading", function($ionicPlatform, $scope, $ionicModal, $ionicPopup, $timeout, Manager, $filter, $ionicLoading) {
+
+$ionicLoading.show({
+    template: "Chargement du jour...",
+    duration: 3000
+}).then(function(){
+    console.log("Loading");
+    $scope.isAllowed = Manager.isAllowed();  
+    if($scope.isAllowed != true){
+        $ionicLoading.hide();
+    }
+});
 
 $ionicPlatform.ready(function() {
     
@@ -34,23 +48,16 @@ $ionicPlatform.ready(function() {
     quicksave_clear = function(){
         var items = ["quicksave", "note", "activite", "nb_eclairs", "en_pause", "debut_pause", "en_deplacement", "debut_deplacement", "jour"]; 
         items.forEach(function(element) {
-              localStorage.removeItem(element);      
+            localStorage.removeItem(element);      
         }, this);
         quicksave_init();
 
     }
 
-
     quicksave_init();
 
 // $scope.Manager = Manager; 
 
-$ionicLoading.show({
-    template: 'Chargement du jour...',
-    }).then(function(){
-        console.log("Loading - affiché");
-        $scope.isAllowed = Manager.isAllowed();  
-    });
 
 $scope.activer = function(key){
     Manager.connection(key).then(function(response){
@@ -83,14 +90,14 @@ $scope.activer = function(key){
                     document.location.href = 'index.html';
                     return 0;
                 }
-         });
+        });
        
  }
 
+
 $scope.$watch('isAllowed', function (newValue) {
 if(newValue == true){  
-  Manager.askDay().then(function(data){
-    
+    Manager.askDay().then(function(data){
         if(!data){
             console.log("Aucun jour");
             /*var nouveau = Manager.createDay();
@@ -133,7 +140,7 @@ if(newValue == true){
         $ionicLoading.hide();
     });
 
-    } else $ionicLoading.hide();
+    } 
 });
     
  $scope.$watch('saisie', function (newValue) {
@@ -419,38 +426,25 @@ if(newValue == true){
                     $scope.jour = j.date;
                     $scope.demo = j.demo;   
                 });
-             
-        
-            
 			
-         }
-         
-     }
+        }
+    }
  }); // fin du watch sur saisie
     
-      }); // fin de ionic platform ready
+}); // fin de ionic platform ready
 }]) // FIN DU CONTROLLEUR
 
 .controller('TravailCtrl', ["$scope", "$ionicModal", "$ionicPopup", "DatabaseManager", "$filter", "$ionicLoading", function($scope, $ionicModal, $ionicPopup, Manager, $filter, $ionicLoading) {
 
- $ionicLoading.show({
-      template: 'Loading...',
-      duration: 10000
-    }).then(function(){
-       console.log("The loading indicator is now displayed");
-    });
-
-/*
 $ionicLoading.show({
-    template: 'Chargement du jour...', 
-    duration: 10000
+    template: 'Chargement du jour...' 
 }).then(function(){
     console.log("Loading....");
     $scope.isAllowed = Manager.isAllowed();  
-});*/
+    if(!$scope.isAllowed) $ionicLoading.hide(); 
+});
 
-console.log("rip");
-
+//$scope.isAllowed = Manager.isAllowed();  
 $scope.Manager = Manager; 
 $scope.activer = function(key){
     Manager.connection(key).then(function(response){
@@ -537,7 +531,7 @@ $scope.$watch('isAllowed', function (newValue) {
         }
         $ionicLoading.hide(); 
     } // fin du if 
-    else  $ionicLoading.hide(); 
+    
 }); // fin du watch sur allow
 	
 }])
