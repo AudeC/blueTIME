@@ -1,4 +1,4 @@
-<ion-view view-title="Saisie">
+<ion-view view-title='Saisie - {{clock | date:"HH:mm"}} {{ demo == "YES" ? "(Demo)" :"" }}'>
     <ion-content class="padding" ng-hide="isAllowed">
         Vous n'avez associé cette tablette à aucun utilisateur. Impossible d'accéder à cette partie.
 
@@ -13,13 +13,13 @@
   <ion-content class="padding" ng-show="isAllowed">
 
     <div class="dash-header" ng-show="saisie">
-        <div class="pull-left">
-            <span class="small button button-stable">{{ jour }} - {{clock | date:'HH:mm'}} {{ demo == "YES" ? "(Demo)" :"" }} </span>
-        </div>   
+        <!--<div class="pull-left">
+            <span class="small button button-stable">{{clock | date:'HH:mm'}} </span>
+        </div>-->   
         <div class="pull-right">
-        <span class="small button button-stable" ng-hide="en_deplacement">{{activite.tache}} - {{ activite.categorie }}</span>
+        <span class="small button button-stable" ng-hide="en_deplacement">{{activite.tache}} <br />{{ activite.categorie }}</span>
         <span class="small button button-stable" ng-show="en_deplacement">Déplacement en cours</span> 
-        <button class="button small button-calm" ng-click="activiteModal.show()">Changer</button>
+        <button class="button button-calm" ng-click="activiteModal.show()">Changer</button>
         </div>
       
       </div>

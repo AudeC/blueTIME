@@ -3,8 +3,6 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'firebase'])
 .controller('DashCtrl', function($scope, $firebaseObject, $firebaseArray, $ionicLoading) {
     
 
-
-
 })
 
 // SaisieCtrl, contrôleur qui pourrait être divisé en plusieurs parties éventuellement
@@ -12,8 +10,7 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'firebase'])
 .controller('SaisieCtrl', ["$ionicPlatform", "$scope", "$ionicModal", "$ionicPopup", "$timeout", "DatabaseManager", "$filter", "$ionicLoading", function($ionicPlatform, $scope, $ionicModal, $ionicPopup, $timeout, Manager, $filter, $ionicLoading) {
 
 $ionicLoading.show({
-    template: "Chargement du jour...",
-    duration: 3000
+    template: "Chargement du jour..."
 }).then(function(){
     console.log("Loading");
     $scope.isAllowed = Manager.isAllowed();  
