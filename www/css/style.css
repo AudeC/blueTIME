@@ -3,6 +3,13 @@
 .pull-left { float: left; }
 .hidden { display:none;  }
 .text-center { text-align: center; }
+.fixed-top {
+    position: fixed;
+    top:0;
+    background: white; 
+    left: 0;
+    right:0;
+}
 
 label {
    padding: 10px;

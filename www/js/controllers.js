@@ -7,7 +7,10 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'firebase'])
 
 // SaisieCtrl, contrôleur qui pourrait être divisé en plusieurs parties éventuellement
 // Gère toute la saisie d'une journée
-.controller('SaisieCtrl', ["$ionicPlatform", "$scope", "$ionicModal", "$ionicPopup", "$timeout", "DatabaseManager", "$filter", "$ionicLoading", function($ionicPlatform, $scope, $ionicModal, $ionicPopup, $timeout, Manager, $filter, $ionicLoading) {
+.controller('SaisieCtrl', 
+["$ionicPlatform", "$scope", "$ionicModal", "$ionicPopup", "$timeout", "DatabaseManager", "$filter", "$ionicLoading", 
+"$ionicScrollDelegate", "$location", function($ionicPlatform, $scope, $ionicModal, $ionicPopup, $timeout, Manager, $filter, 
+$ionicLoading, $ionicScrollDelegate, $location) {
 
 $ionicLoading.show({
     template: "Chargement du jour..."
@@ -18,6 +21,13 @@ $ionicLoading.show({
         $ionicLoading.hide();
     }
 });
+
+$scope.scrollMe = function(anchor) {  
+    $location.hash(anchor);
+
+    $ionicScrollDelegate.anchorScroll();
+};
+
 
 $ionicPlatform.ready(function() {
     
@@ -310,10 +320,12 @@ if(newValue == true){
     // Gestion du déplacement 
     $scope.deplacement = function(){
         console.log("en déplacement");
-        if($scope.en_deplacement == false){
+        if($scope.en_deplacement == false){ 
+            // On initie le déplacement 
             $scope.en_deplacement = true;
             $scope.debut_deplacement = $scope.clock; 
         } else {
+            // On termine un déplacement
             Manager.record({
                 activite: "Déplacement",
                 nature: "DEPLACEMENT",
@@ -324,6 +336,8 @@ if(newValue == true){
             });
             $scope.note.text = "";
             $scope.en_deplacement = false;
+            activiteFin();
+            $scope.activiteModal.show();
         }
     }
     
@@ -363,7 +377,6 @@ if(newValue == true){
         }
     
         $scope.activiteModal.hide();
-        val.id = $scope.activite+1;
         $scope.activite = val; // on change les valeurs sur l'activité en cours
         $scope.activite.debut = $scope.clock; // fixer à maintenant le début de l'activité
         $scope.nb_eclairs = 0; // réinitialiser le nombre d'interruptions éclairs
