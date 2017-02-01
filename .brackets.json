@@ -1,0 +1,7 @@
+{
+    "jscodehints.detectedExclusions": [
+        "C:/Users/Aude/Desktop/PROJETS/blue-steam/bs/www/js/services.js",
+        "C:/Users/Aude/Desktop/PROJETS/blue-steam/bs/platforms/android/assets/www/plugins/ionic-plugin-keyboard/www/android/keyboard.js",
+        "C:/Users/Aude/Desktop/PROJETS/blue-steam/bs/plugins/cordova-sqlite-storage/spec/www/lib/jasmine-2.4.1/jasmine-html.js"
+    ]
+}

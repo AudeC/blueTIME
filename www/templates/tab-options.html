@@ -1,0 +1,31 @@
+<ion-view view-title="Options">
+    <ion-content class="padding" ng-hide="isAllowed">
+
+            Vous n'avez associé cette tablette à aucun utilisateur. Impossible d'accéder à cette partie.
+
+        Entrez une clef pour vous connecter : <br />
+        <label class="item item-input">
+          <input ng-model="activationKey" type="text" placeholder="Clef d'activation">
+        </label>
+        <input type="submit" class="button button-assertive" ng-click="activer(activationKey)"/>
+
+
+
+    </ion-content>
+
+  <ion-content class="padding" ng-show="isAllowed">
+    <h1>Paramétrer</h1>
+            
+            Cette partie est toujours en cours de développement... Veuillez utiliser les boutons ci-dessous avec prudence. 
+
+            <span class="button button-block button-calm" ng-click="send()">Envoyer les données</span>
+
+            <p ng-show="demo_auth">Mode démo : {{ manager.demo == "YES" ? "Activé" : "Désactivé" }}
+              <span class="button button-block button-positive" ng-click="switch()">{{ manager.demo == "YES" ? "Désactiver" : "Activer" }}</span>                  
+
+            </p>
+
+             <span style="margin-top: 200px" class="button button-block button-assertive" ng-click="unlink()">Délier la tablette</span>
+          
+  </ion-content>
+</ion-view>

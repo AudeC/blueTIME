@@ -1,0 +1,74 @@
+<ion-modal-view>
+  <ion-content class="padding">
+      <h1 class="padding">Nouvelle activité  
+          <button class="button button-calm" type="submit" ng-click="activiteChange(new)" ng-show="new.tache && new.categorie">Valider</button>
+       <button class="button button-assertive" ng-click="activiteModal.hide()" ng-show="activite.tache">Annuler</button>
+       </h1>
+      
+      <form novalidate>
+          <div class="row">
+            <div class="col col50">
+          
+           <h2>Choisir une tâche</h2>
+          
+              <ul class="tasklist">
+                  <li ng-repeat="t in taches | orderBy:'-est_fav'">
+                     
+                      <ion-radio ng-model="$parent.new.tache" name="new.tache" ng-value="t.nom">
+                          <i ng-show="t.est_fav" class="fav ion ion-android-star"></i>{{ t.nom }}</ion-radio>
+
+                          
+                  </li>
+
+
+              </ul>
+              
+             </div>
+     
+      
+            <div class="col col50">
+
+              <h2>Choisir une catégorie</h2>
+              <ul class="tasklist">
+                  <li ng-repeat="t in categories | orderBy:'-est_fav'">
+                     
+                      <ion-radio ng-model="$parent.new.categorie" name="new.categorie" ng-value="t.nom">
+                          <i ng-show="t.est_fav" class="fav ion ion-android-star"></i>{{ t.nom }}</ion-radio>
+                  </li>
+              </ul>
+
+            </div>
+              
+          
+          </div>
+          
+      <div class="text-center">
+           <button class="button button-calm" type="submit" ng-click="activiteChange(new)" ng-show="new.tache && new.categorie">Valider</button>
+       <button class="button button-assertive" ng-click="activiteModal.hide()" ng-show="activite.tache">Annuler</button>
+
+          </div>
+      
+      </form>
+      
+      <form class="row">
+          <div class="col col50">
+                <label class="item item-input">
+                <input ng-model="newTache" type="text" value="{{ newTache }}" placeholder="Nouvelle tâche">
+            </label>
+          <input type="submit" ng-click="create('tache', newTache)" class="block button button-balanced" value="Ajouter une tâche"/>
+          
+          </div>
+          
+        <div class="col col50">
+            <label class="item item-input">
+                 <input ng-model="newCategorie" type="text" value="{{ newCategorie }}" placeholder="Nouvelle catégorie"/>
+            </label>
+         
+          <input type="submit" class="block button button-balanced" ng-click="create('categorie', newCategorie)" value="Ajouter une catégorie"/>
+          </div>
+           
+      </form>
+      
+   
+  </ion-content>
+</ion-modal-view>

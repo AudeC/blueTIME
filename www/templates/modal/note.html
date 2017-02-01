@@ -1,0 +1,26 @@
+<ion-modal-view>
+  <ion-content class="padding">
+      <h1>Note</h1>
+      
+      <form>
+          
+          <div class="padding">
+              <p>Si vous souhaitez préciser votre action en cours, vous pouvez joindre une note facultative. Le champ est réinitialisé à chaque changement de tâche, et sauvegardé en temps réel (appuyer sur "fermer" n'annule donc pas les modifications).</p>
+
+               <ion-item>
+                  
+                    <textarea rows="6" ng-model="note.text" placeholder="Commentaire"></textarea>
+                    </ion-item>
+
+
+          </div>
+    
+    
+      
+      <button class="button button-energized" ng-click="noteModal.hide()">Fermer</button>
+          
+       </form>
+      
+      
+  </ion-content>
+</ion-modal-view>

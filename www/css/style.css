@@ -1,0 +1,148 @@
+/*Classes génériques*/
+.pull-right { float: right; }
+.pull-left { float: left; }
+.hidden { display:none;  }
+.text-center { text-align: center; }
+
+label {
+   padding: 10px;
+}
+
+input[type="radio"] + label{
+     border: 1px solid lightgrey; 
+    display:block;
+    border-radius:30px;
+}
+
+input[type="radio"]:checked + label{
+    border-color: darkcyan;
+}
+
+.fav {
+color: gold;
+}
+.tasklist.travail i.fav {
+	float: right;
+font-size: 30px;
+margin-top: -36px;
+margin-right: 13px;
+}
+
+.suppr{
+color:firebrick;
+float: right;
+font-size: 20px;
+margin-top: -30px;
+margin-right: 55px;
+
+}
+
+.card {
+	padding: 10px;
+	color: white;
+	background: #104949;
+
+}
+.card h2 { color: white; }
+
+@media (min-width: 680px){
+.modal {
+    top: 0%;
+    right: 0%;
+    bottom: 0%;
+    left: 0%;
+    min-height: 240px;
+    width:100%;
+}
+}
+
+
+
+/*Dashboard*/
+.title-center, .tab-nav tabs {
+	    background: #007F7F!important;
+    color: white!important;
+    font-weight: normal;
+	
+}
+
+.pane ion-content {
+	   /background: #96A39F;
+	
+}
+.dash-main {
+    padding-top: 50px; 
+    padding-bottom: 50px; 
+    text-align: center;
+}
+
+.dash-footer {
+
+}
+
+.dash-header {
+    overflow:hidden;
+}
+
+.button.big {
+    border-radius: 100px;
+    margin:5px;
+    width: 180px;
+    height: 180px;
+}
+.button.big i { 
+    margin: 20px;
+    display:block; 
+}
+.button.big i:before { 
+    font-size: 50px;  
+}
+
+.tasklist .item-content {
+    white-space: normal;
+}
+@media (max-width: 625px){
+    .dash-main {
+        padding-top: 10px; 
+        padding-bottom: 10px; 
+    }
+    .button.big {
+        width: 120px;
+        height: 120px;
+        position: relative; 
+    }
+    .button.big i { margin: 5px; line-height: 20px; }
+    .button.big i:before {
+        font-size: 23px; 
+        line-height: 30px; 
+    }
+    .notif-eclair {
+        position: absolute;
+        left: 24px;
+        top: 28px;
+        line-height: 9px;
+    }
+
+    .row {
+        display:block ;
+    }
+}
+
+.button.small {
+ min-height: 20px;
+    line-height: 25px; 
+}
+
+.button.block {
+   /margin:auto;
+    margin-top: 10px;
+}
+
+.notif-eclair {
+    background: rgba(255, 255,255, 0.2);
+    min-width:20px;
+    height:20px;
+    padding: 5px;
+    border-radius : 10px;
+    font-size:15px;
+}

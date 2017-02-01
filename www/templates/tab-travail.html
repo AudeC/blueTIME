@@ -1,0 +1,94 @@
+<ion-view view-title="Travail préparatif">
+  <ion-content class="padding" ng-hide="isAllowed">
+
+            Vous n'avez associé cette tablette à aucun utilisateur. Impossible d'accéder à cette partie.
+
+        Entrez une clef pour vous connecter : <br />
+        <label class="item item-input">
+          <input ng-model="activationKey" type="text" placeholder="Clef d'activation">
+        </label>
+        <input type="submit" class="button button-assertive" ng-click="activer(activationKey)"/>
+
+
+
+    </ion-content>
+  <ion-content class="padding" ng-show="isAllowed">
+      
+      <div class="card">
+   <p>Afin d'optimiser la saisie de vos journées, vous pourrez ici configurer les tâches et les catégories associées.</p>
+   <p>Pour modifier la préférence d'une tâche ou d'un catégorie, cliquez directement sur l'étoile.</p>
+   <p>Avec les boutons ci-dessous, vous pouvez ajouter les données par défaut de l'application (attention, risque de créer des doublons)</p>
+      <input type="submit" class="button button-small" ng-click="Manager.default()" value="Tâches par défaut"/>
+      <span class="button button-small" ng-click="Manager.defaultCategories()">Catégories par défaut</span>
+     
+      </div>
+      
+      
+        <div class="row">
+          
+              <div class="col col50">
+          
+           <h2>Tâches</h2>
+          
+              <ul class="tasklist travail">
+                  <li class="padding" ng-repeat="t in taches | orderBy:'-est_fav'">
+                      <input type="radio" class="hidden" name="new.tache" id="t{{ t.$id }}" ng-model="$parent.new.tache" value="{{ t.nom }}"/>
+                      <label for="t{{ t.$id }}">
+                   
+                          {{ t.nom }}
+                            
+                      </label>
+					   <i ng-show="t.est_fav" class="fav ion ion-android-star" ng-click="changeFav(t, 0, 'tache')"></i>
+						<i ng-hide="t.est_fav" class="fav ion ion-android-star-outline" ng-click="changeFav(t, 1, 'tache')"></i>
+                        <i class="suppr ion ion-close-round" ng-click="suppr(t, 'tache')"></i>
+                  </li>
+
+
+              </ul>
+              
+          </div>
+     
+      
+            <div class="col col50">
+
+              <h2>Catégories</h2>
+              <ul class="tasklist travail">
+                  <li class="padding" ng-repeat="t in categories | orderBy:'-est_fav'">
+                      <input type="radio" class="hidden" name="new.categorie" id="c{{ t.$id }}" ng-model="$parent.new.categorie" value="{{ t.nom }}"/>
+                      <label for="c{{ t.$id }}">
+                           
+                          {{ t.nom }}
+						</label>
+						 <i ng-show="t.est_fav" class="fav ion ion-android-star" ng-click="changeFav(t, 0, 'categorie')"></i>
+						 <i ng-hide="t.est_fav" class="fav ion ion-android-star-outline" ng-click="changeFav(t, 1, 'categorie')"></i>
+                         <i class="suppr ion ion-close-round" ng-click="suppr(t, 'categorie')"></i>
+						
+                  </li>
+              </ul>
+
+            </div>
+          
+          </div>
+		  
+		   <form class="row">
+          <div class="col col50">
+                <label class="item item-input">
+                <input ng-model="newTache" type="text" value="{{ newTache }}" placeholder="Nouvelle tâche">
+            </label>
+          <input type="submit" ng-click="create('tache', newTache)" class="block button button-balanced" value="Ajouter une tâche"/>
+          
+          </div>
+          
+        <div class="col col50">
+            <label class="item item-input">
+                 <input ng-model="newCategorie" type="text" value="{{ newCategorie }}" placeholder="Nouvelle catégorie"/>
+            </label>
+         
+          <input type="submit" class="block button button-balanced" ng-click="create('categorie', newCategorie)" value="Ajouter une catégorie"/>
+          </div>
+           
+      </form>
+      </form>
+      
+  </ion-content>
+</ion-view>

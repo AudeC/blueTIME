@@ -1,0 +1,31 @@
+<!--
+Create tabs with an icon and label, using the tabs-positive style.
+Each tab's child <ion-nav-view> directive will have its own
+navigation history that also transitions its views in and out.
+-->
+<ion-tabs class="tabs-icon-top tabs-color-active-energized">
+
+  <!-- Dashboard Tab -->
+  <ion-tab title="Accueil" icon-off="ion-ios-pulse" icon-on="ion-ios-pulse-strong" href="#/tab/dash">
+    <ion-nav-view name="tab-dash"></ion-nav-view>
+  </ion-tab>
+
+ 
+  <ion-tab title="Travail préparatoire" icon-off="ion-ios-chatboxes-outline" icon-on="ion-ios-chatboxes" href="#/tab/travail">
+    <ion-nav-view name="tab-travail"></ion-nav-view>
+  </ion-tab>
+
+  <!-- Account Tab -->
+  <ion-tab title="Saisie" icon-off="ion-ios-gear-outline" icon-on="ion-ios-gear" href="#/tab/saisie">
+    <ion-nav-view name="tab-saisie"></ion-nav-view>
+  </ion-tab>
+    
+    
+    <ion-tab title="Options" icon-off="ion-ios-person-outline" icon-on="ion-ios-person" href="#/tab/options">
+    <ion-nav-view name="tab-options"></ion-nav-view>
+  </ion-tab>
+    
+    
+
+
+</ion-tabs>
