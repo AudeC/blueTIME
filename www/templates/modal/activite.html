@@ -1,19 +1,20 @@
-<ion-modal-view>
-      <ion-header-bar class="bar">
-        <button class="button button-assertive" ng-click="activiteModal.hide()" ng-show="activite.tache">Annuler</button>
-        <button class="button button-balanced" ng-click="scrollMe('choix_tache')">Tâches</button>
+<ion-modal-view id="modal_act">
+      <ion-header>
+      
+        <button class="button button-balanced" ng-click="scrollMe('choix_tache')">Tâches</button>     
         <button class="button button-balanced" ng-click="scrollMe('choix_cat')">Catégories</button>
-    </ion-header-bar>
+          <button class="button button-assertive" ng-click="activiteModal.hide()" ng-show="activite.tache">Annuler</button>
+    </ion-header>
 
   <ion-content class="has-subheader">
-        <h1 class="padding">Nouvelle activité  
-            <button class="button button-calm" type="submit" ng-click="activiteChange(new)" ng-show="new.tache && new.categorie">Valider</button></h1>
+        <h1 class="padding" id="choix_tache">Nouvelle activité  
+            <button class="button button-calm" type="submit" ng-click="activiteChange(new)" ng-show="new.tache && new.categorie">Démarrer {{ new.tache }} ({{ new.categorie }})</button></h1>
 
       <form novalidate>
           <div class="row">
             <div class="col col50">
           
-           <h2 id="choix_tache">Choisir une tâche</h2>
+           <h2>Choisir une tâche</h2>
           
               <ul class="tasklist">
                   <li ng-repeat="t in taches | orderBy:'-est_fav'">

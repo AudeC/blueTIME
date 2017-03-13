@@ -300,7 +300,7 @@ if(newValue == true){
     
     // Gestion de la pause
     
-    $scope.pause = function(){
+    $scope.pause = function(type){
         if($scope.en_pause == false){
             $scope.en_pause = true;
             $scope.debut_pause = $scope.clock; 
@@ -310,10 +310,16 @@ if(newValue == true){
                 nature: "PAUSE",
                 tampon_debut: $scope.debut_pause,
                 tampon_fin: $scope.clock,
+                nb_eclairs: $scope.nb_eclairs,
                 jour: $scope.jour,
                 note: $scope.note
             });
             $scope.en_pause = false; 
+            $scope.nb_eclairs = 0;
+            if(type == "CHANGE"){
+                activiteFin($scope.debut_pause);
+                $scope.activiteModal.show();
+            }
         }
     }
     
@@ -336,7 +342,7 @@ if(newValue == true){
             });
             $scope.note.text = "";
             $scope.en_deplacement = false;
-            activiteFin();
+            activiteFin($scope.debut_deplacement);
             $scope.activiteModal.show();
         }
     }
@@ -349,39 +355,43 @@ if(newValue == true){
         animation: 'slide-in-up'
     }).then(function(modal) {
         $scope.activiteModal = modal;
-            if($scope.activite.nature = "") $scope.activiteModal.show();
+          //  if($scope.activite.nature = "") $scope.activiteModal.show();
         
     });
 
-    var activiteFin = function(){
+    var activiteFin = function(tmp_fin, callback){
+        if(!tmp_fin) tmp_fin = $scope.clock;
         Manager.record({
                 activite: $scope.activite.tache,
                 categorie: $scope.activite.categorie,
                 nature: "TACHE",
                 nb_eclairs: $scope.nb_eclairs,
                 tampon_debut: $scope.activite.debut,
-                tampon_fin: $scope.clock,
+                tampon_fin: tmp_fin,
                 jour: $scope.jour,
                 note: $scope.note
             });   
             $scope.note.text = "";
+            if(callback){
+                callback();
+            }
         
     }
     
     // Changement d'activité
     $scope.activiteChange = function(val){ // val donne les infos sur la nouvelle activité : nom, catégorie..
-        if($scope.activite.tache != "Lancement"){ // si c'est pas la première activité depuis qu'on démarre l'appli
+      //  if($scope.activite.tache != "Lancement"){ // si c'est pas la première activité depuis qu'on démarre l'appli
             // On enregistre l'activité précédente dans la BDD
-            activiteFin(); 
-            quicksave();
-        }
-    
+            console.log($scope.activite);
+            activiteFin();
+            //quicksave();
+      //  } 
         $scope.activiteModal.hide();
         $scope.activite = val; // on change les valeurs sur l'activité en cours
         $scope.activite.debut = $scope.clock; // fixer à maintenant le début de l'activité
         $scope.nb_eclairs = 0; // réinitialiser le nombre d'interruptions éclairs
         $scope.note.text = " ";
-    
+        console.log($scope.activite);
 
         if($scope.en_pause) // si on était en pause, on enregistre la pause
             $scope.pause();
@@ -557,7 +567,7 @@ $scope.$watch('isAllowed', function (newValue) {
 
 .controller('OptionsCtrl', ["$scope", "$ionicModal", "DatabaseManager", "$cordovaNetwork", "$ionicPopup", function($scope, $ionicModal, Manager, $cordovaNetwork, $ionicPopup) {
 
-
+var mdp;
 
 $scope.isAllowed = Manager.isAllowed();  
 $scope.activer = function(key){
@@ -595,9 +605,15 @@ $scope.activer = function(key){
         });
 }
 
+/*$scope.login = function(key){
+    if(key == )
+    mdp = true;
+}*/
+
 $scope.$watch('isAllowed', function (newValue) {
     if(!$scope.isAllowed) return false;
-
+    
+    
     if(Manager.demo != "YES"){
         Manager.setDemo("NO");
     }

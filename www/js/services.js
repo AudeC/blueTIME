@@ -75,13 +75,13 @@ angular.module('starter.services', ['firebase'])
     manager.connection = function(key){
        return $http({
             method: 'GET',
-            url: 'http://analyse.bluetime-solution.com/key_activation.php?key='+key
+            url: 'http://analyse.bstime.fr/appli/key_activation.php?key='+key
             });
     }
     manager.send = function(key){
           return $http({
             method: 'GET',
-            url: 'http://analyse.bluetime-solution.com/firebase.php?key='+key
+            url: 'http://analyse.bstime.fr/appli/firebase.php?key='+key
             });
     }
     manager.changeRef = function(d){

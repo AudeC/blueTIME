@@ -18,7 +18,7 @@ label {
 input[type="radio"] + label{
      border: 1px solid lightgrey; 
     display:block;
-    border-radius:30px;
+    padding-left: 35px;
 }
 
 input[type="radio"]:checked + label{
@@ -29,18 +29,19 @@ input[type="radio"]:checked + label{
 color: gold;
 }
 .tasklist.travail i.fav {
-	float: right;
+	float: left;
 font-size: 30px;
-margin-top: -36px;
-margin-right: 13px;
+margin-top: -40px;
+margin-left: 7px;
 }
+
 
 .suppr{
 color:firebrick;
 float: right;
 font-size: 20px;
 margin-top: -30px;
-margin-right: 55px;
+margin-right: 13px;
 
 }
 
@@ -153,3 +154,15 @@ margin-right: 55px;
     border-radius : 10px;
     font-size:15px;
 }
+
+#modal_act .has-subheader{
+    top: 60px;
+}
+
+#modal_act ion-header {
+    width: 100%;
+   text-align: center; 
+    display:block;
+    padding:5px;
+}
+
