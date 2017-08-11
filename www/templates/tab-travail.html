@@ -77,6 +77,8 @@
             </label>
           <input type="submit" ng-click="create('tache', newTache)" class="block button button-balanced" value="Ajouter une tâche"/>
           
+          <br /><br />
+           <input type="submit" class="button button-small" ng-click="reinitialiserTaches()" value="Réinitialiser les tâches"/>
           </div>
           
         <div class="col col50">
@@ -85,6 +87,9 @@
             </label>
          
           <input type="submit" class="block button button-balanced" ng-click="create('categorie', newCategorie)" value="Ajouter une catégorie"/>
+          
+          <br /><br />
+           <input type="submit" class="button button-small" ng-click="reinitialiserCategories()" value="Réinitialiser les catégories"/>
           </div>
            
       </form>

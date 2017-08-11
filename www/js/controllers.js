@@ -2,6 +2,9 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'firebase'])
 
 .controller('DashCtrl', function($scope, $firebaseObject, $firebaseArray, $ionicLoading) {
     
+$scope.schedule = function () {
+             
+}
 
 })
 
@@ -65,6 +68,10 @@ $ionicPlatform.ready(function() {
 
 // $scope.Manager = Manager; 
 
+$scope.repriseJournee = function(){
+    Manager.takeoverDay();
+    $scope.saisie = true; 
+}
 
 $scope.activer = function(key){
     Manager.connection(key).then(function(response){
@@ -85,7 +92,7 @@ $scope.activer = function(key){
                 } else {
                     $ionicPopup.alert({
                         title: 'Activation',
-                        template: "L'application BlueTIME a été activée avec succès ! Vous pouvez désormais procéder au test"
+                        template: "L'application bsTIME a été activée avec succès ! Vous pouvez désormais procéder au test"
                     });
                     
                     localStorage.setItem("key", key);
@@ -105,11 +112,10 @@ $scope.activer = function(key){
 $scope.$watch('isAllowed', function (newValue) {
 if(newValue == true){  
     Manager.askDay().then(function(data){
+
+        console.log("key : "+localStorage.getItem("key"));
         if(!data){
             console.log("Aucun jour");
-            /*var nouveau = Manager.createDay();
-            console.log("Jour en cours", data);
-            $scope.jour = nouveau.date; */
 
         } else {
             console.log("Il y a un jour");
@@ -160,7 +166,12 @@ if(newValue == true){
     $scope.choix.interruptions = ["Telephone", "Sms/mail", "Bruit/environnement/pensée", "Urgence", "Recevoir un client", "Recevoir collaborateur",
 "Aider quelqu’un", "Autre"]; 
     // contient les raisons possibles d'interruptions
-    $scope.interr = {};
+    $scope.interr = {
+        hdebut : {
+            h:0,
+            min:0
+        }
+    };
     $scope.taches = {}; // variable globale qui contient la liste de toutes les tâches possibles
     $scope.categories = {}; // variable "globale" qui contient la liste de toutes les catégories
     
@@ -243,7 +254,16 @@ if(newValue == true){
 
     // Augmente le nombre d'interruptions éclairs
   $scope.eclair = function(){
-    $scope.nb_eclairs++;   
+    $scope.nb_eclairs++;
+     console.log("Nouvelle interruption éclair !");
+            Manager.record({
+                activite: "IntEclair",
+                nature: "INTERRUPTION",
+                tampon_debut: $scope.clock,
+                tampon_fin: $scope.clock,
+                jour: $scope.jour,
+                note: ""
+            });   
   }
      
   // Modal pour l'interruption
@@ -254,9 +274,23 @@ if(newValue == true){
       $scope.interruptionModal = modal;
       $scope.interruptionModal.open = function(){
         $scope.interr_click = $scope.clock; 
+          var d = new Date($scope.clock);
+        $scope.interr.hdebut.h = d.getHours().toString(); 
+        $scope.interr.hdebut.min = d.getMinutes().toString(); 
+      
         $scope.interruptionModal.show();
     }
   });
+
+  // on va s'en servir pour l'interruption !
+  $scope.range = function(min, max, step) {
+    step = step || 1;
+    var input = [];
+    for (var i = min; i <= max; i += step) {
+        input.push(i);
+    }
+    return input;
+};
 
    $ionicModal.fromTemplateUrl('templates/modal/note.html', {
      scope: $scope,
@@ -264,6 +298,7 @@ if(newValue == true){
   }).then(function(modal) {
       $scope.noteModal = modal;
       $scope.noteModal.open = function(){ 
+        
         $scope.noteModal.show();
     }
   });
@@ -273,6 +308,7 @@ if(newValue == true){
     // Fonction pour créer une interruption dans la BDD, déclenchée si on a validé
     $scope.interruption = function(i, debut, fin){
         i.heure_debut = debut;
+        
         i.heure_fin = fin; 
         console.log(i);
             Manager.record({
@@ -281,19 +317,31 @@ if(newValue == true){
                 tampon_debut: i.heure_debut,
                 tampon_fin: i.heure_fin,
                 jour: $scope.jour,
-                note: $scope.note
+                note: ""
             });
         $scope.interruptionModal.hide(); 
 
     }
     
-     $scope.$watch('interr.heure_debut', function (newValue) {
-        $scope.interr_click = $filter('date')(newValue, 'HH:mm:ss'); 
-        //$scope.interr_click = newValue; 
+    $scope.creerHeure = function(heure, min){
+        var d = new Date(); 
+        d.setHours(heure);
+        d.setMinutes(min); 
+        return d; 
+    }
+     $scope.$watch('interr.hdebut.h', function (newValue) {
+        //$scope.interr_click.setHours($scope.interr.hdebut.h); 
+        
+        });
+     $scope.$watch('interr.hdebut.min', function (newValue) {
+       // $scope.interr_click.setHours($scope.interr.hdebut.min); 
+        
         });
         
     $scope.$watch('interr_click', function (newValue) {
-    $scope.interr.heure_debut = $filter('date')(newValue, 'HH:mm:ss'); 
+   // var d = $scope.interr_click;
+  //  $scope.interr.hdebut.h = d.getHours(); 
+  //  $scope.interr.hdebut.min = d.getMinutes();  
     // $scope.interr.heure_debut = newValue; 
     });
     
@@ -359,35 +407,37 @@ if(newValue == true){
         
     });
 
-    var activiteFin = function(tmp_fin, callback){
+    var activiteFin = function(tmp_fin, tache, categorie, debut){
         if(!tmp_fin) tmp_fin = $scope.clock;
+        tache = tache || $scope.activite.tache;
+        categorie = categorie || $scope.activite.categorie;
+        debut = debut || $scope.activite.debut;
         Manager.record({
-                activite: $scope.activite.tache,
-                categorie: $scope.activite.categorie,
+                activite: tache,
+                categorie: categorie,
                 nature: "TACHE",
                 nb_eclairs: $scope.nb_eclairs,
-                tampon_debut: $scope.activite.debut,
+                tampon_debut: debut,
                 tampon_fin: tmp_fin,
                 jour: $scope.jour,
                 note: $scope.note
             });   
             $scope.note.text = "";
-            if(callback){
-                callback();
-            }
+            
         
     }
     
     // Changement d'activité
     $scope.activiteChange = function(val){ // val donne les infos sur la nouvelle activité : nom, catégorie..
-      //  if($scope.activite.tache != "Lancement"){ // si c'est pas la première activité depuis qu'on démarre l'appli
+        if($scope.activite.tache != "Lancement"){ // si c'est pas la première activité depuis qu'on démarre l'appli
             // On enregistre l'activité précédente dans la BDD
             console.log($scope.activite);
-            activiteFin();
+            activiteFin($scope.clock, $scope.activite.tache, $scope.activite.categorie, $scope.activite.debut);
             //quicksave();
-      //  } 
+        } 
         $scope.activiteModal.hide();
-        $scope.activite = val; // on change les valeurs sur l'activité en cours
+        $scope.activite.tache = val.tache; // on change les valeurs sur l'activité en cours
+        $scope.activite.categorie = val.categorie;
         $scope.activite.debut = $scope.clock; // fixer à maintenant le début de l'activité
         $scope.nb_eclairs = 0; // réinitialiser le nombre d'interruptions éclairs
         $scope.note.text = " ";
@@ -431,7 +481,7 @@ if(newValue == true){
             Manager.send(localStorage.getItem("key")); 
             $ionicPopup.alert({
                 title: 'Mise à jour',
-                template: 'Les données ont été envoyées sur votre profil BlueTIME. Veuillez vous y connecter pour vérifier que les nouvelles journées ont bien été ajoutées (cela peut échouer en cas d\'absence de connexion internet)'
+                template: 'Les données ont été envoyées sur votre profil bsTIME. Veuillez vous y connecter pour vérifier que les nouvelles journées ont bien été ajoutées (cela peut échouer en cas d\'absence de connexion internet)'
             });
             
     
@@ -462,10 +512,13 @@ if(newValue == true){
 }); // fin de ionic platform ready
 }]) // FIN DU CONTROLLEUR
 
-.controller('TravailCtrl', ["$scope", "$ionicModal", "$ionicPopup", "DatabaseManager", "$filter", "$ionicLoading", function($scope, $ionicModal, $ionicPopup, Manager, $filter, $ionicLoading) {
+.controller('TravailCtrl', ["$scope", "$ionicPlatform", "$ionicModal", "$ionicPopup", "DatabaseManager", "$filter", "$ionicLoading", "$timeout", function($scope, $ionicPlatform, $ionicModal, $ionicPopup, Manager, $filter, $ionicLoading, $timeout) {
+
+
+$ionicPlatform.ready(function() {
 
 $ionicLoading.show({
-    template: 'Chargement du jour...' 
+    template: 'Chargement en cours...' 
 }).then(function(){
     console.log("Loading....");
     $scope.isAllowed = Manager.isAllowed();  
@@ -493,7 +546,7 @@ $scope.activer = function(key){
         } else {
             $ionicPopup.alert({
                 title: 'Activation',
-                template: "L'application BlueTIME a été activée avec succès ! Vous pouvez désormais procéder au test"
+                template: "L'application bsTIME a été activée avec succès ! Vous pouvez désormais procéder au test"
             });
                     
             localStorage.setItem("key", key);
@@ -507,6 +560,9 @@ $scope.activer = function(key){
         }
     });
 }
+
+
+    
 
 $scope.$watch('isAllowed', function (newValue) {
     if($scope.isAllowed){
@@ -557,11 +613,53 @@ $scope.$watch('isAllowed', function (newValue) {
                 Manager.removeTask(obj);
             }
         }
-        $ionicLoading.hide(); 
+
+        function confirmReset(mot) {
+            return $ionicPopup.confirm({
+            title: 'Réinitaliser',
+            template: 'Voulez-vous vraiment réinitialiser vos '+mot+" ? Tout ce que vous avez entré sera effacé et remplacé par le contenu par défaut.",
+            buttons: [{ // Array[Object] (optional). Buttons to place in the popup footer.
+            text: 'Annuler',
+            type: 'button-default',
+            
+            }, {
+                text: 'Confirmer',
+                type: 'button-positive',
+                onTap: function(e) { return "yes"; }
+            }
+            ]});
+        
+        }
+        $scope.reinitialiserTaches = function(){
+            confirmReset("tâches").then(function(res){
+                if(res == "yes"){
+                    Manager.dropTasks(); 
+                    Manager.default(); 
+                }
+            });
+
+        }
+
+        $scope.reinitialiserCategories = function(){
+            confirmReset("catégories").then(function(res){
+                if(res == "yes"){
+                    Manager.dropCategories(); 
+                    Manager.defaultCategories(); 
+                }
+            });
+        }
+
+         $timeout(function () {
+            $ionicLoading.hide();
+            
+        }, 2000);
+
     } // fin du if 
     
 }); // fin du watch sur allow
-	
+    
+}); // fin du ionic platform ready
+
 }])
 		
 
@@ -589,7 +687,7 @@ $scope.activer = function(key){
         } else {
             $ionicPopup.alert({
                 title: 'Activation',
-                template: "L'application BlueTIME a été activée avec succès ! Vous pouvez désormais procéder au test"
+                template: "L'application bsTIME a été activée avec succès ! Vous pouvez désormais procéder au test"
             });
             
             localStorage.setItem("key", key);
@@ -634,7 +732,7 @@ $scope.$watch('isAllowed', function (newValue) {
         Manager.send(localStorage.getItem("key")); 
         $ionicPopup.alert({
      title: 'Mise à jour',
-     template: 'Les données ont été envoyées sur votre profil BlueTIME. Veuillez vous y connecter pour vérifier que les nouvelles journées ont bien été ajoutées (cela peut échouer en cas d\'absence de connexion internet)'
+     template: 'Les données ont été envoyées sur votre profil bsTIME. Veuillez vous y connecter pour vérifier que les nouvelles journées ont bien été ajoutées (cela peut échouer en cas d\'absence de connexion internet)'
    });
     }
 

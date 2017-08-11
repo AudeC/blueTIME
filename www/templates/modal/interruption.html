@@ -6,7 +6,17 @@
           
           <div class="padding" style="overflow: hidden;">
             
-             <div class="pull-left"> Début : <input type="text" ng-model="interr.heure_debut"/></div>
+             <div class="pull-left"> Début : 
+                
+                <select ng-model="interr.hdebut.h">
+                    <option ng-repeat="n in range(0,23)" value="{{n}}">{{n}}</li>
+                </select>H
+               <select ng-model="interr.hdebut.min">
+                    <option ng-repeat="n in range(0,59)" value="{{n}}">{{n}}</li>
+                </select>
+                            
+            
+            </div>
         
             <div class="pull-right">
                Fin :  <br />{{clock | date:'HH:mm:ss'}} 
@@ -26,7 +36,7 @@
       </ul>
       
       <button class="button button-assertive" ng-click="interruptionModal.hide()">Annuler</button>
-      <button class="button button-calm" ng-show="interr.cause" ng-click="interruption(interr, interr.heure_debut, clock)">Finir interruption</button>
+      <button class="button button-calm" ng-show="interr.cause" ng-click="interruption(interr, creerHeure(interr.hdebut.h, interr.hdebut.min), clock)">Finir interruption</button>
           
        </form>
       

@@ -71,6 +71,15 @@ angular.module('starter.services', ['firebase'])
      manager.removeCategory = function(obj){
 		ref.child("categories/"+obj['$id']).remove();
 	}
+
+
+    manager.dropTasks = function(){
+        ref.child("taches").remove();
+    }
+
+     manager.dropCategories = function(){
+        ref.child("categories").remove();
+    }
     
     manager.connection = function(key){
        return $http({
@@ -175,9 +184,9 @@ angular.module('starter.services', ['firebase'])
            
             if(r.nature == "INTERRUPTION"){
                
-                var hour = r.tampon_debut;
-                r.tampon_debut = new Date();
-                r.tampon_debut.setHours(hour.substring(0, 2), hour.substring(3, 5));
+               // var hour = r.tampon_debut;
+              //  r.tampon_debut = new Date();
+               // r.tampon_debut.setHours(hour.substring(0, 2), hour.substring(3, 5));
                r.tampon_debut = r.tampon_debut.valueOf(); 
                                  
             }
@@ -241,6 +250,21 @@ angular.module('starter.services', ['firebase'])
                 var first = data.key;
                 ref.child('jours/'+first).update({
                     statut: 1
+                });
+                resolve(data);
+            });
+
+        });
+ }
+
+     
+    manager.takeoverDay = function(){
+        return $q(function(resolve, reject){ 
+            
+            manager.askDay().then(function(data){ // jour { statut, date, demo }
+                var first = data.key;
+                ref.child('jours/'+first).update({
+                    statut: 0
                 });
                 resolve(data);
             });
